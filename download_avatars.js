@@ -11,19 +11,24 @@ function getRepoContributors(repoOwner, repoName, cb) {
       }
     };
   
-    request(options, function(err, res, body) {
-        body = JSON.parse(body);
-        cb(err, body);
+    result.forEach(function(repo) {
+        repo = repo.avatar_url;
     });
+  
+        cb(err, body);
+    
+    
 }
 
 getRepoContributors("jquery", "jquery", function(err, result) {
-    // console.log("Errors:", err);
-    // console.log("Result:", result);
-    result.forEach(function(repo) {
-        return repo.avatar_url;
-    });
-    
+    console.log("Errors:", err);
+    console.log("Result:", result);
+    request(options, function(err, res, body) {
+        body = JSON.parse(body);
+        body.forEach(function(repo){
+            downloadImageByURL(repo.avatar_url, `avatars/,${repo.login}.jpeg`)
+        })
+    })
 });
 
 function downloadImageByURL(url, filePath) {
@@ -48,7 +53,7 @@ function downloadImageByURL(url, filePath) {
            .pipe(fs.createWriteStream(filePath));                         
 };
 
-downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
+// downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani.jpg")
 
 console.log('Welcome to the GitHub Avatar Downloader!');
 
